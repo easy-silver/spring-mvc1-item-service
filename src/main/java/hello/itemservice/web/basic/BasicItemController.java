@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -86,10 +87,24 @@ public class BasicItemController {
     /**
      * PRG - Post/Redirect/Get
      */
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV5(Item item) {
         itemRepository.save(item);
         return "redirect:/basic/items/" + item.getId();
+    }
+
+    /**
+     * RedirectAttributes
+     * URL 인코딩도 가능하고, PathVariable, 쿼리 파라미터까지 처리해준다.
+     */
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", item.getId());
+        redirectAttributes.addAttribute("status", true);
+
+        // /basic/items/3?status=true 로 치환
+        return "redirect:/basic/items/{itemId}";
     }
 
     @GetMapping("/{itemId}/edit")
