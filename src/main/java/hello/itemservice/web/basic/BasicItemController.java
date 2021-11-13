@@ -90,6 +90,12 @@ public class BasicItemController {
         return "basic/editForm";
     }
 
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+        itemRepository.update(itemId, item);
+        //PathVariable 값이 아래 경로에도 치환됨
+        return "redirect:/basic/items/{itemId}";
+    }
 
     /**
      * 테스트용 데이터 추가
